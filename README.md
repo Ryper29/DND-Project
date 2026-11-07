@@ -1,46 +1,44 @@
 # Dungeons & Dragons
 
-Rencana pengembangan game **Dungeons & Dragons 2D** menggunakan **Unity** dan **C#**. Proyek ini ditujukan untuk menghadirkan pengalaman bermain RPG dengan tampilan visual, karakter, eksplorasi, dan pertarungan.
+A development plan for a **2D Dungeons & Dragons** game built with **Unity** and **C#**. The project aims to deliver an RPG experience featuring visuals, characters, exploration, and combat.
 
 ## Status
 
-Proyek masih dalam tahap perencanaan. Detail gameplay, cerita, dan fitur dapat berubah seiring proses pengembangan.
+The project is in the planning stage. Gameplay, story, and feature details may change as development progresses.
 
-## Visi
+## Vision
 
-Mengembangkan game RPG 2D bertema fantasi yang menggabungkan eksplorasi dunia, perkembangan karakter, dan pertarungan berbasis mekanik Dungeons & Dragons.
+Develop a 2D fantasy RPG that combines world exploration, character progression, and combat inspired by Dungeons & Dragons mechanics.
 
-## Rencana Fitur
+## Planned Features
 
-- Karakter pemain dengan atribut dan kemampuan
-- Eksplorasi lingkungan 2D
-- Pertarungan melawan musuh
-- Sistem senjata, perlengkapan, dan item
-- Pengalaman dan perkembangan karakter
-- Antarmuka untuk status karakter dan aksi permainan
+- Player characters with attributes and abilities
+- 2D environment exploration
+- Combat against enemies
+- Weapons, equipment, and item systems
+- Character experience and progression
+- An interface for character status and game actions
 
-## Teknologi Rencana
+## Planned Technology
 
 - **Game engine:** Unity
-- **Bahasa pemrograman:** C#
-- **Dimensi permainan:** 2D
+- **Programming language:** C#
+- **Game dimension:** 2D
 
-## Tahapan Pengembangan
+## Development Roadmap
 
-1. Menentukan konsep permainan, aturan, dan cakupan fitur.
-2. Membuat prototipe gerakan karakter dan lingkungan 2D.
-3. Mengembangkan sistem karakter, pertarungan, dan musuh.
-4. Menambahkan antarmuka, aset visual, suara, dan konten permainan.
-5. Melakukan pengujian dan penyempurnaan.
+1. Define the game concept, rules, and feature scope.
+2. Build a prototype for character movement and the 2D environment.
+3. Develop character, combat, and enemy systems.
+4. Add the interface, visual assets, audio, and game content.
+5. Test and refine the game.
 
-## Anggota Kelompok 9
+## Contributors
 
-| No | Nama | NPM |
-|---|---|---|
-| 1 | M. Faqih Dwinanda | 2415061056 |
-| 2 | Rifki Yudika Perdana | 2415061090 |
-| 3 | Riffa Yudika Permana | 2415061091 |
+- Faqih
+- Rifki
+- Riffa
 
-## Catatan
+## Note
 
-Kode tugas PBO sebelumnya disimpan pada branch `archive`. Branch `main` ditujukan untuk pengembangan proyek game DND ini.
+The previous OOP assignment code is stored on the `archive` branch. The `main` branch is intended for development of this DND game project.
