@@ -1,9 +1,37 @@
-# Tugas PBO Kelompok 9 - Dungeons & Dragons (Java)
+# Dungeons & Dragons — Kelompok 9
 
-Tugas Pemrograman Berorientasi Objek (PBO) berbahasa **Java** dengan tema simulasi pertempuran **Dungeons & Dragons**.
+Rencana pengembangan game **Dungeons & Dragons 2D** menggunakan **Unity** dan **C#**. Proyek ini ditujukan untuk menghadirkan pengalaman bermain RPG dengan tampilan visual, karakter, eksplorasi, dan pertarungan.
 
-> **Mata Kuliah:** Pemrograman Berorientasi Objek  
-> **Pengampu:** Dr. Eng. Helmy Fitriawan, S.T., M.Sc.
+## Status
+
+Proyek masih dalam tahap perencanaan. Detail gameplay, cerita, dan fitur dapat berubah seiring proses pengembangan.
+
+## Visi
+
+Mengembangkan game RPG 2D bertema fantasi yang menggabungkan eksplorasi dunia, perkembangan karakter, dan pertarungan berbasis mekanik Dungeons & Dragons.
+
+## Rencana Fitur
+
+- Karakter pemain dengan atribut dan kemampuan
+- Eksplorasi lingkungan 2D
+- Pertarungan melawan musuh
+- Sistem senjata, perlengkapan, dan item
+- Pengalaman dan perkembangan karakter
+- Antarmuka untuk status karakter dan aksi permainan
+
+## Teknologi Rencana
+
+- **Game engine:** Unity
+- **Bahasa pemrograman:** C#
+- **Dimensi permainan:** 2D
+
+## Tahapan Pengembangan
+
+1. Menentukan konsep permainan, aturan, dan cakupan fitur.
+2. Membuat prototipe gerakan karakter dan lingkungan 2D.
+3. Mengembangkan sistem karakter, pertarungan, dan musuh.
+4. Menambahkan antarmuka, aset visual, suara, dan konten permainan.
+5. Melakukan pengujian dan penyempurnaan.
 
 ## Anggota Kelompok 9
 
@@ -13,47 +41,6 @@ Tugas Pemrograman Berorientasi Objek (PBO) berbahasa **Java** dengan tema simula
 | 2 | Rifki Yudika Perdana | 2415061090 |
 | 3 | Riffa Yudika Permana | 2415061091 |
 
-## Struktur Project
+## Catatan
 
-```
-├── Tugas-1/    → Kode awal & referensi dari dosen
-│   ├── Main.java   (Dasar OOP: Class, Object, Encapsulation)
-│   └── DND.java    (Inheritance, Polymorphism, Static Member, D20 System)
-│
-└── Tugas-2/    → Pengembangan oleh mahasiswa
-    ├── Main.java   (Refactor + Full Encapsulation + Level System)
-    └── DND.java    (EXP System, Level Up, Bonus Armor, Race Attribute)
-```
-
-## Konsep OOP yang Diimplementasikan
-
-| Konsep | Keterangan |
-|---|---|
-| **Encapsulation** | Atribut `private` + Getter & Setter |
-| **Inheritance** | `Fighter` dan `Wizard` extends `Player` |
-| **Polymorphism** | Override method `attack()` di setiap subclass |
-| **Object Member** | `Player` memiliki objek `Weapon` dan `Armor` (Has-A) |
-| **Static Member** | `totalCharacters` pada class `Player` (Tugas 1) |
-| **EXP & Leveling** | Sistem pengalaman dan naik level otomatis (Tugas 2) |
-
-## Cara Menjalankan
-
-```bash
-# Tugas 1 - Main
-cd Tugas-1
-javac Main.java
-java Main
-
-# Tugas 1 - DnD
-javac DND.java
-java DND
-
-# Tugas 2 - Main
-cd Tugas-2
-javac Main.java
-java Main
-
-# Tugas 2 - DnD
-javac DND.java
-java DND
-```
+Kode tugas PBO sebelumnya disimpan pada branch `archive`. Branch `main` ditujukan untuk pengembangan proyek game DND ini.
