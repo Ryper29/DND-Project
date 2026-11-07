@@ -1,4 +1,4 @@
-# Dungeons & Dragons — Kelompok 9
+# Dungeons & Dragons
 
 Rencana pengembangan game **Dungeons & Dragons 2D** menggunakan **Unity** dan **C#**. Proyek ini ditujukan untuk menghadirkan pengalaman bermain RPG dengan tampilan visual, karakter, eksplorasi, dan pertarungan.
 
