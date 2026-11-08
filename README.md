@@ -35,9 +35,9 @@ Develop a 2D fantasy RPG that combines world exploration, character progression,
 
 ## Contributors
 
-- Faqih
-- Rifki
-- Riffa
+- [Dwinanda](https://github.com/Dwinan)
+- [Rifki Yudika](https://github.com/Ryper29)
+- [Riffa](https://github.com/RiffaYP)
 
 ## Note
 
