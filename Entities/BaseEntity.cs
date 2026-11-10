@@ -1,10 +1,11 @@
 using DnD.Core;
 using DnD.Systems.Inventory;
+using DnD.Systems.Dice;
 
 namespace DnD.Entities
 {
     [System.Serializable]
-    public abstract class BaseEntity : ICombatant, ILevelable
+    public abstract class BaseEntity : ICombatant, ILevelable, IRandomizedCombatant
     {
         private string _name;
         private Race _race;
@@ -102,5 +103,7 @@ namespace DnD.Entities
         public void FullHeal() => _totalDamageTaken = 0;
 
         public abstract void PerformAttack(ICombatant target);
+
+        public abstract void PerformAttack(ICombatant target, IRandomSource randomSource);
     }
 }

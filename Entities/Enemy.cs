@@ -20,13 +20,15 @@ namespace DnD.Entities
             _experienceReward = experienceReward;
         }
 
-        public override void PerformAttack(ICombatant target)
+        public override void PerformAttack(ICombatant target) => PerformAttack(target, DiceRoller.RandomSource);
+
+        public override void PerformAttack(ICombatant target, IRandomSource randomSource)
         {
             if (!IsAlive) return;
 
             GameEvents.RaiseTurnChanged(this);
 
-            var roll = DiceRoller.Roll(DiceType.D20);
+            var roll = DiceRoller.Roll(DiceType.D20, randomSource);
             GameEvents.RaiseDiceRolled(Name, roll);
 
             if (roll.Value == 1)

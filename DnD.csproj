@@ -7,4 +7,7 @@
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="DnD.Tests/**/*.cs" />
+  </ItemGroup>
 </Project>

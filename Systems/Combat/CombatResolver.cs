@@ -2,17 +2,23 @@ using System.Collections.Generic;
 using System.Linq;
 using DnD.Core;
 using DnD.Entities;
+using DnD.Systems.Dice;
 
 namespace DnD.Systems.Combat
 {
     public class CombatResolver
     {
         private readonly GameManager _gameManager;
-        private readonly System.Random _targetRng = new System.Random();
+        private readonly IRandomSource _random;
 
-        public CombatResolver(GameManager gameManager)
+        public CombatResolver(GameManager gameManager) : this(gameManager, DiceRoller.RandomSource)
+        {
+        }
+
+        public CombatResolver(GameManager gameManager, IRandomSource random)
         {
             _gameManager = gameManager;
+            _random = random;
         }
 
         public void RunAutoCombat(List<ICombatant> party, List<ICombatant> enemies, int maxRounds = 20)
@@ -31,8 +37,11 @@ namespace DnD.Systems.Combat
                 {
                     var aliveEnemies = enemies.Where(e => e.IsAlive).ToList();
                     if (aliveEnemies.Count == 0) break;
-                    var target = aliveEnemies[_targetRng.Next(aliveEnemies.Count)];
-                    member.PerformAttack(target);
+                    var target = aliveEnemies[_random.Next(0, aliveEnemies.Count)];
+                    if (member is IRandomizedCombatant randomizedMember)
+                        randomizedMember.PerformAttack(target, _random);
+                    else
+                        member.PerformAttack(target);
                 }
 
                 if (!enemies.Any(e => e.IsAlive))
@@ -45,8 +54,11 @@ namespace DnD.Systems.Combat
                 {
                     var aliveParty = party.Where(p => p.IsAlive).ToList();
                     if (aliveParty.Count == 0) break;
-                    var target = aliveParty[_targetRng.Next(aliveParty.Count)];
-                    enemy.PerformAttack(target);
+                    var target = aliveParty[_random.Next(0, aliveParty.Count)];
+                    if (enemy is IRandomizedCombatant randomizedEnemy)
+                        randomizedEnemy.PerformAttack(target, _random);
+                    else
+                        enemy.PerformAttack(target);
                 }
 
                 if (!party.Any(p => p.IsAlive))

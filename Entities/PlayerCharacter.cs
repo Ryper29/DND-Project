@@ -24,13 +24,15 @@ namespace DnD.Entities
             _currentMana = MaxMana;
         }
 
-        public override void PerformAttack(ICombatant target)
+        public override void PerformAttack(ICombatant target) => PerformAttack(target, DiceRoller.RandomSource);
+
+        public override void PerformAttack(ICombatant target, IRandomSource randomSource)
         {
             if (!IsAlive) return;
 
             GameEvents.RaiseTurnChanged(this);
 
-            var roll = DiceRoller.Roll(DiceType.D20);
+            var roll = DiceRoller.Roll(DiceType.D20, randomSource);
             GameEvents.RaiseDiceRolled(Name, roll);
 
             switch (_characterClass)

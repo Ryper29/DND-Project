@@ -1,3 +1,5 @@
+using DnD.Systems.Dice;
+
 namespace DnD.Entities
 {
     public interface ICombatant
@@ -11,6 +13,11 @@ namespace DnD.Entities
         int DefensePower { get; }
         void TakeDamage(int rawDamage);
         void PerformAttack(ICombatant target);
+    }
+
+    public interface IRandomizedCombatant
+    {
+        void PerformAttack(ICombatant target, IRandomSource randomSource);
     }
 
     public interface IDamageable
