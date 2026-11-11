@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using DnD.Entities;
 
 namespace DnD.Systems.Combat
@@ -17,6 +18,10 @@ namespace DnD.Systems.Combat
 
         public void InitializeTurnOrder(List<ICombatant> combatants)
         {
+            if (combatants == null) throw new ArgumentNullException(nameof(combatants));
+            if (combatants.Any(combatant => combatant == null))
+                throw new ArgumentException("Combatants cannot contain null entries.", nameof(combatants));
+
             _turnOrder = combatants.Where(c => c.IsAlive).ToList();
             _currentIndex = 0;
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DnD.Core;
@@ -17,12 +18,15 @@ namespace DnD.Systems.Combat
 
         public CombatResolver(GameManager gameManager, IRandomSource random)
         {
-            _gameManager = gameManager;
-            _random = random;
+            _gameManager = gameManager ?? throw new ArgumentNullException(nameof(gameManager));
+            _random = random ?? throw new ArgumentNullException(nameof(random));
         }
 
         public void RunAutoCombat(List<ICombatant> party, List<ICombatant> enemies, int maxRounds = 20)
         {
+            if (party == null) throw new ArgumentNullException(nameof(party));
+            if (enemies == null) throw new ArgumentNullException(nameof(enemies));
+
             var allCombatants = new List<ICombatant>();
             allCombatants.AddRange(party);
             allCombatants.AddRange(enemies);
