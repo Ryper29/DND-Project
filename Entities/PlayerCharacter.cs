@@ -13,6 +13,12 @@ namespace DnD.Entities
         public CharacterClass CharacterClass => _characterClass;
         public string CombatStyle => _combatStyle;
         public int CurrentMana { get => _currentMana; private set => _currentMana = value; }
+        public bool SpendMana(int amount)
+        {
+            if (amount < 0 || _currentMana < amount) return false;
+            _currentMana -= amount;
+            return true;
+        }
         public int MaxMana => Level * (_characterClass == CharacterClass.Wizard ? 10 : 2);
 
         public PlayerCharacter(string name, Race race, CharacterClass characterClass,

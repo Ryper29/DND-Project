@@ -20,99 +20,115 @@ namespace DnD.Presentation
 
             PrintBanner();
 
-            // --- Create Party ---
-            var aurelius = new PlayerCharacter(
-                "Aurelius", Race.SemiDragon, CharacterClass.Fighter,
-                new Stats(100, 10, 20, 5), combatStyle: "Brawler");
+            var hero = CreateCharacter();
+            hero.EquipWeapon(EquipmentDatabase.GetWeapon(
+                hero.CharacterClass == CharacterClass.Wizard ? "Wooden Staff" : "Iron Sword"));
+            hero.EquipArmor(EquipmentDatabase.GetArmor(
+                hero.CharacterClass == CharacterClass.Wizard ? "Cloth Robe" : "Light Armor"));
 
-            var andrea = new PlayerCharacter(
-                "Andrea", Race.Human, CharacterClass.Fighter,
-                new Stats(100, 10, 20, 5), combatStyle: "Swordsman");
-
-            var kaelen = new PlayerCharacter(
-                "Kaelen", Race.Elf, CharacterClass.Wizard,
-                new Stats(80, 8, 15, 4, 30, 10));
-
-            // --- Equip Party ---
-            aurelius.EquipWeapon(EquipmentDatabase.GetWeapon("Dragon Claw"));
-            aurelius.EquipArmor(EquipmentDatabase.GetArmor("Dragon Scale"));
-
-            andrea.EquipWeapon(EquipmentDatabase.GetWeapon("Iron Sword"));
-            andrea.EquipArmor(EquipmentDatabase.GetArmor("Light Armor"));
-
-            kaelen.EquipWeapon(EquipmentDatabase.GetWeapon("Wooden Staff"));
-            kaelen.EquipArmor(EquipmentDatabase.GetArmor("Cloth Robe"));
-
-            // --- Create Boss Enemy ---
-            var goblinKing = new Enemy(
-                "Goblin King", Race.Goblin,
-                new Stats(300, 15, 30, 8),
-                combatStyle: "Giant Club Smasher",
-                experienceReward: 100);
-
+            var goblinKing = new Enemy("Goblin King", Race.Goblin,
+                new Stats(120, 8, 15, 3), combatStyle: "Club Fighter", experienceReward: 100);
             goblinKing.EquipWeapon(EquipmentDatabase.GetWeapon("Giant Spiked Club"));
             goblinKing.EquipArmor(EquipmentDatabase.GetArmor("Hardened Skin"));
 
-            // --- Display Stats ---
-            Console.WriteLine("\n╔═══════════════════════════════════╗");
-            Console.WriteLine("║        PARTY ROSTER               ║");
-            Console.WriteLine("╚═══════════════════════════════════╝");
-
-            ConsoleUIRenderer.PrintCharacterStats(aurelius);
-            ConsoleUIRenderer.PrintCharacterStats(andrea);
-            ConsoleUIRenderer.PrintCharacterStats(kaelen);
-
-            Console.WriteLine("\n╔═══════════════════════════════════╗");
-            Console.WriteLine("║        ENEMY ENCOUNTER            ║");
-            Console.WriteLine("╚═══════════════════════════════════╝");
-
-            ConsoleUIRenderer.PrintCharacterStats(goblinKing);
-
-            // --- Run Combat ---
-            Console.WriteLine("\n>>> COMBAT INITIATED: PARTY vs GOBLIN KING <<<\n");
+            var party = new List<ICombatant> { hero };
+            var enemies = new List<ICombatant> { goblinKing };
+            Console.WriteLine("\n=== YOUR CHARACTER ===");
+            ConsoleUIRenderer.PrintCharacterStats(hero);
+            Console.WriteLine("\nA Goblin King blocks the path!");
 
             var gameManager = new GameManager();
             var combatResolver = new CombatResolver(gameManager);
+            combatResolver.RunTurnBasedCombat(party, enemies);
 
-            var party = new List<ICombatant> { aurelius, andrea, kaelen };
-            var enemies = new List<ICombatant> { goblinKing };
-
-            combatResolver.RunAutoCombat(party, enemies, maxRounds: 10);
-
-            // --- Post-Combat Summary ---
-            Console.WriteLine("\n╔═══════════════════════════════════╗");
-            Console.WriteLine("║      POST-COMBAT SUMMARY          ║");
-            Console.WriteLine("╚═══════════════════════════════════╝");
-
-            foreach (var member in party)
-            {
-                ConsoleUIRenderer.PrintCharacterStats(member);
-            }
-            ConsoleUIRenderer.PrintCharacterStats(goblinKing);
-
-            Console.WriteLine($"\nTotal Rounds: {gameManager.State.CurrentRound}");
+            Console.WriteLine("\n=== COMBAT SUMMARY ===");
+            ConsoleUIRenderer.PrintCharacterStats(hero);
             Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();
+        }
+
+private static PlayerCharacter CreateCharacter()
+        {
+            Console.WriteLine("\n=== CHARACTER CREATION ===");
+            Console.Write("Character name: ");
+            var name = Console.ReadLine()?.Trim();
+            while (string.IsNullOrWhiteSpace(name))
+            {
+                Console.Write("Name cannot be empty. Enter name: ");
+                name = Console.ReadLine()?.Trim();
+            }
+
+            var races = (Race[])Enum.GetValues(typeof(Race));
+            Console.WriteLine("Choose race:");
+            for (int i = 0; i < races.Length; i++) Console.WriteLine($"{i + 1}. {races[i]}");
+            var race = races[ReadOption(races.Length) - 1];
+
+            var classes = (CharacterClass[])Enum.GetValues(typeof(CharacterClass));
+            Console.WriteLine("Choose class:");
+            for (int i = 0; i < classes.Length; i++) Console.WriteLine($"{i + 1}. {classes[i]}");
+            var characterClass = classes[ReadOption(classes.Length) - 1];
+
+            var random = new Random();
+            var scores = new int[6];
+            for (int i = 0; i < scores.Length; i++)
+            {
+                int a = random.Next(1, 7), b = random.Next(1, 7), c = random.Next(1, 7), d = random.Next(1, 7);
+                scores[i] = a + b + c + d - Math.Min(Math.Min(a, b), Math.Min(c, d));
+            }
+
+            var stats = new Stats(scores[0], scores[1], scores[2], scores[3], scores[4], scores[5],
+                characterClass == CharacterClass.Fighter ? 120 : 90,
+                characterClass == CharacterClass.Fighter ? 12 : 8,
+                10, characterClass == CharacterClass.Wizard || characterClass == CharacterClass.Cleric ? 30 : 10,
+                20, 5, 5);
+
+            Console.WriteLine($"\n{name} — {race} {characterClass}");
+            Console.WriteLine($"STR {stats.Strength}  DEX {stats.Dexterity}  CON {stats.Constitution}");
+            Console.WriteLine($"INT {stats.Intelligence}  WIS {stats.Wisdom}  CHA {stats.Charisma}");
+            return new PlayerCharacter(name, race, characterClass, stats);
+        }
+
+        private static int ReadOption(int maximum)
+        {
+            while (true)
+            {
+                Console.Write($"Select 1-{maximum}: ");
+                if (int.TryParse(Console.ReadLine(), out int choice) && choice >= 1 && choice <= maximum)
+                    return choice;
+                Console.WriteLine("Invalid choice.");
+            }
         }
 
         private static void PrintBanner()
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine(@"
-  ╔══════════════════════════════════════════════════╗
-  ║                                                  ║
-  ║    ███╗   ███╗██╗   ██╗████████╗██╗  ██╗         ║
-  ║    ████╗ ████║╚██╗ ██╔╝╚══██╔══╝██║  ██║         ║
-  ║    ██╔████╔██║ ╚████╔╝    ██║   ███████║         ║
-  ║    ██║╚██╔╝██║  ╚██╔╝     ██║   ██╔══██║         ║
-  ║    ██║ ╚═╝ ██║   ██║      ██║   ██║  ██║         ║
-  ║    ╚═╝     ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝         ║
-  ║              W E A V E R                          ║
-  ║                                                  ║
-  ║         A DnD-Inspired Combat Engine             ║
-  ║                                                  ║
-  ╚══════════════════════════════════════════════════╝");
+   ╔══════════════════════════════════════════════════╗
+   ║                                                  ║
+   ║    ███╗   ███╗██╗   ██╗████████╗██╗  ██╗         ║
+   ║    ████╗ ████║╚██╗ ██╔╝╚══██╔══╝██║  ██║         ║
+   ║    ██╔████╔██║ ╚████╔╝    ██║   ███████║         ║
+   ║    ██║╚██╔╝██║  ╚██╔╝     ██║   ██╔══██║         ║
+   ║    ██║ ╚═╝ ██║   ██║      ██║   ██║  ██║         ║
+   ║    ╚═╝     ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝         ║
+   ║              W E A V E R                          ║
+   ║         A DnD-Inspired Combat Engine             ║
+   ║                                                  ║
+   ╚══════════════════════════════════════════════════╝");
             Console.ResetColor();
+        }
+
+        private static void PrintInventory(ICombatant character)
+        {
+            Console.WriteLine($"\n=== INVENTORY {character.Name} ===");
+            Console.WriteLine($"HP: {character.CurrentHealth}/{character.MaxHealth}");
+            if (character is BaseEntity entity)
+            {
+                Console.WriteLine($"Weapon: {entity.EquippedWeapon?.Name ?? "Fists"}");
+                Console.WriteLine($"Armor: {entity.EquippedArmor?.Name ?? "None"}");
+            }
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
     }
 }
