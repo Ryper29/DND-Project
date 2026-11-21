@@ -9,6 +9,13 @@
 # Zip backups
 *.zip
 
+# .NET build outputs
+bin/
+obj/
+
+# Local game saves
+dnd-save.json
+
 # IDE files
 .idea/
 *.iml

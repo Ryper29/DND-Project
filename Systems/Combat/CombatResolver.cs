@@ -62,6 +62,7 @@ namespace DnD.Systems.Combat
             if (enemies.Count == 0) throw new ArgumentException("Enemies cannot be empty.", nameof(enemies));
 
             _gameManager.StartCombat(party.Concat(enemies).ToList());
+            var rewardedEnemies = new HashSet<ICombatant>();
             int round = 0;
 
             while (party.Any(p => p.IsAlive) && enemies.Any(e => e.IsAlive))
@@ -76,21 +77,54 @@ namespace DnD.Systems.Combat
                     GameEvents.RaiseTurnChanged(member);
                     Console.WriteLine($"\n>>> {member.Name}'s turn <<<");
                     Console.WriteLine("1. Attack");
-                    Console.WriteLine("2. Cast spell");
-                    Console.WriteLine("3. Defend (not implemented)");
-                    var choice = GetPlayerChoice(3);
+                    Console.WriteLine("2. Class ability");
+                    Console.WriteLine("3. Defend");
+                    Console.WriteLine("4. Use consumable");
+                    var choice = GetPlayerChoice(4);
 
                     if (choice == 1)
                     {
+                        var target = SelectTarget(targets);
                         if (member is IRandomizedCombatant randomizedMember)
-                            randomizedMember.PerformAttack(targets[0], _random);
+                            randomizedMember.PerformAttack(target, _random);
                         else
-                            member.PerformAttack(targets[0]);
+                            member.PerformAttack(target);
                     }
-                    else if (choice == 2 && member is PlayerCharacter wizard && wizard.CharacterClass == CharacterClass.Wizard)
-                        ExecuteWizardSpell(wizard, targets[0]);
+                    else if (choice == 2 && member is PlayerCharacter character)
+                    {
+                        var target = character.CharacterClass == CharacterClass.Cleric ? character : SelectTarget(targets);
+                        character.UseClassAbility(target, _random);
+                    }
+                    else if (choice == 3 && member is BaseEntity entity)
+                    {
+                        entity.Defend();
+                        GameEvents.RaiseCombatLog($"{member.Name} braces for the next hit.");
+                    }
+                    else if (choice == 4 && member is PlayerCharacter itemUser)
+                    {
+                        if (itemUser.Inventory.Consumables.Count == 0)
+                            GameEvents.RaiseCombatLog("No consumables available.");
+                        else
+                        {
+                            for (int i = 0; i < itemUser.Inventory.Consumables.Count; i++)
+                                Console.WriteLine($"{i + 1}. {itemUser.Inventory.Consumables[i].Name}");
+                            int index = GetPlayerChoice(itemUser.Inventory.Consumables.Count) - 1;
+                            if (!itemUser.UseConsumable(index))
+                                GameEvents.RaiseCombatLog("Item cannot be used now.");
+                        }
+                    }
                     else
-                        GameEvents.RaiseCombatLog("That action is unavailable; your turn is skipped.");
+                        GameEvents.RaiseCombatLog("Action unavailable for this combatant.");
+                }
+
+                foreach (var defeated in enemies.Where(e => !e.IsAlive && !rewardedEnemies.Contains(e)))
+                {
+                    rewardedEnemies.Add(defeated);
+                    if (defeated is Enemy enemyReward && enemyReward.ExperienceReward > 0)
+                    {
+                        foreach (var winner in party.OfType<PlayerCharacter>().Where(p => p.IsAlive))
+                            winner.GainExperience(enemyReward.ExperienceReward);
+                    }
                 }
 
                 foreach (var enemy in enemies.Where(e => e.IsAlive).ToList())
@@ -113,6 +147,13 @@ namespace DnD.Systems.Combat
                 ? "The party has been defeated."
                 : "All enemies defeated! Victory!");
             _gameManager.EndCombat();
+        }
+
+        private static ICombatant SelectTarget(List<ICombatant> targets)
+        {
+            for (int i = 0; i < targets.Count; i++)
+                Console.WriteLine($"{i + 1}. {targets[i].Name} ({targets[i].CurrentHealth}/{targets[i].MaxHealth} HP)");
+            return targets[GetPlayerChoice(targets.Count) - 1];
         }
 
         private static int GetPlayerChoice(int maximum)
