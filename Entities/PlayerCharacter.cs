@@ -1,6 +1,7 @@
 using DnD.Core;
 using DnD.Systems.Dice;
 using DnD.Systems.Inventory;
+using DnD.Systems.Magic;
 
 namespace DnD.Entities
 {
@@ -11,8 +12,12 @@ namespace DnD.Entities
         private string _combatStyle;
         private int _currentMana;
         private readonly InventorySystem _inventory = new InventorySystem();
+        private readonly SpellSlotManager _spellSlots = new SpellSlotManager();
 
         public InventorySystem Inventory => _inventory;
+        public SpellSlotManager SpellSlots => _spellSlots;
+        public Spell ActiveConcentrationSpell { get; set; }
+        public ICombatant ConcentrationTarget { get; set; }
         public CharacterClass CharacterClass => _characterClass;
         public string CombatStyle => _combatStyle;
         protected override int AbilityAttackBonus => (_characterClass switch

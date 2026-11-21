@@ -56,6 +56,14 @@ namespace DnD.Entities
         public WeaponData EquippedWeapon => _equippedWeapon;
         public ArmorData EquippedArmor => _equippedArmor;
 
+        public int PositionX { get; set; }
+        public int PositionY { get; set; }
+        public void SetPosition(int x, int y)
+        {
+            PositionX = x;
+            PositionY = y;
+        }
+
         protected BaseEntity(string name, Race race, Stats baseStats)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new System.ArgumentException("Name is required.", nameof(name));
